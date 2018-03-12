@@ -65,7 +65,8 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 public class Camera2VideoFragment extends Fragment
-        implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback {
+        implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback,
+        ActivityCompat.OnRequestPermissionsResultCallback{
 
     private static final int SENSOR_ORIENTATION_DEFAULT_DEGREES = 90;
     private static final int SENSOR_ORIENTATION_INVERSE_DEGREES = 270;
@@ -284,6 +285,7 @@ public class Camera2VideoFragment extends Fragment
         mButtonVideo = (Button) view.findViewById(R.id.video);
         mButtonVideo.setOnClickListener(this);
         view.findViewById(R.id.info).setOnClickListener(this);
+        view.findViewById(R.id.change2cam).setOnClickListener(this);
     }
 
     @Override
@@ -323,6 +325,12 @@ public class Camera2VideoFragment extends Fragment
                             .setPositiveButton(android.R.string.ok, null)
                             .show();
                 }
+                break;
+            }
+            case R.id.change2cam: {
+                getActivity().getFragmentManager().beginTransaction()
+                        .replace(R.id.container,Camera2BasicFragment.newInstance())
+                        .commit();
                 break;
             }
         }

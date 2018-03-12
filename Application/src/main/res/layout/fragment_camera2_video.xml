@@ -57,7 +57,7 @@
         android:src="@drawable/ic_action_info" />
 
     <Button
-        android:id="@+id/changeVV"
+        android:id="@+id/change2cam"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

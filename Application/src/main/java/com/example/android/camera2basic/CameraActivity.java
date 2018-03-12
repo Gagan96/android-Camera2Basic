@@ -18,98 +18,18 @@ package com.example.android.camera2basic;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
 
 public class CameraActivity extends AppCompatActivity {
 
-    Button botonFragCamaraHorizontal;
-    Button botonFragCamaraVertical;
-    Button botonFragVideoHorizontal;
-    Button botonFragVideoVertical;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
-
-        botonFragCamaraHorizontal = findViewById(R.id.changeCH);
-        botonFragCamaraVertical = findViewById(R.id.changeCV);
-        botonFragVideoHorizontal = findViewById(R.id.changeVH);
-        botonFragVideoVertical = findViewById(R.id.changeVV);
 
         if (null == savedInstanceState) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, Camera2BasicFragment.newInstance())
                     .commit();
         }
-
-        /*
-        * pasar los botones a sus fragments correspondientes
-        * hacer getctivity() y luego la transaction
-        * */
-
-
-        View.OnClickListener listenerVH = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switchToVH();
-            }
-        };
-//
-//        View.OnClickListener listenerVV = new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                switchToVV();
-//            }
-//        };
-//
-//        /*View.OnClickListener listenerCH = new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                switchToCH();
-//            }
-//        };
-//
-//        View.OnClickListener listenerCV = new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                switchToCV();
-//            }
-//        };*/
-//
-            //botonFragCamaraHorizontal.setOnClickListener(listenerVH);
-        botonFragCamaraVertical.setOnClickListener(listenerVH);
-//        //botonFragVideoHorizontal.setOnClickListener(listenerCH);
-//        //botonFragVideoVertical.setOnClickListener(listenerCV);
-//
-//        /*
-//        * View.OnClickListener listenera = new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                switchtoFragmentA();
-//            }
-//        };
-//        buttonA.setOnClickListener(listenera);
-//        * */
-
     }
-
-//    private void switchToVV() {
-//        getFragmentManager().beginTransaction().replace(R.id.container, Camera2VideoFragment.newInstance()).commit();
-//
-//    }
-/*
-    private void switchToCH() {
-
-    }
-
-    private void switchToVV() {
-
-    }
-*/
-    private void switchToVH() {
-        getFragmentManager().beginTransaction().replace(R.id.container, Camera2VideoFragment.newInstance()).commit();
-    }
-
 }
