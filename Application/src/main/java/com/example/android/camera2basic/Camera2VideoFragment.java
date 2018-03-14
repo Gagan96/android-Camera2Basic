@@ -38,10 +38,12 @@ import android.hardware.camera2.CameraMetadata;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.MediaRecorder;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v13.app.FragmentCompat;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
@@ -327,12 +329,12 @@ public class Camera2VideoFragment extends Fragment
                 }
                 break;
             }
-            case R.id.change2cam: {
+            /*case R.id.change2cam: {
                 getActivity().getFragmentManager().beginTransaction()
                         .replace(R.id.container,Camera2BasicFragment.newInstance())
                         .commit();
                 break;
-            }
+            }*/
         }
     }
 
@@ -377,8 +379,10 @@ public class Camera2VideoFragment extends Fragment
     /**
      * Requests permissions needed for recording video.
      */
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private void requestVideoPermissions() {
-        if (shouldShowRequestPermissionRationale(VIDEO_PERMISSIONS)) {
+        if (shouldShowRequestPermissionRationale(VIDEO_PERMISSIONS)
+        && shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             new ConfirmationDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
         } else {
             FragmentCompat.requestPermissions(this, VIDEO_PERMISSIONS, REQUEST_VIDEO_PERMISSIONS);
@@ -423,7 +427,9 @@ public class Camera2VideoFragment extends Fragment
     @SuppressWarnings("MissingPermission")
     private void openCamera(int width, int height) {
         if (!hasPermissionsGranted(VIDEO_PERMISSIONS)) {
-            requestVideoPermissions();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestVideoPermissions();
+            }
             return;
         }
         final Activity activity = getActivity();
@@ -499,7 +505,7 @@ public class Camera2VideoFragment extends Fragment
             return;
         }
         try {
-            closePreviewSession();
+            //closePreviewSession();
             SurfaceTexture texture = mTextureView.getSurfaceTexture();
             assert texture != null;
             texture.setDefaultBufferSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());

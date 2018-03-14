@@ -913,6 +913,11 @@ public class Camera2BasicFragment extends Fragment
                 getActivity().getFragmentManager().beginTransaction()
                         .replace(R.id.container, Camera2VideoFragment.newInstance())
                         .commit();
+                try {
+                    finalize();
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                }
                 break;
             }
         }
