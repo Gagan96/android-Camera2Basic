@@ -330,7 +330,7 @@ public class Camera2VideoFragment extends Fragment
                 break;
             }
             /*case R.id.change2cam: {
-                getActivity().getFragmentManager().beginTransaction()
+                getFragmentManager().beginTransaction()
                         .replace(R.id.container,Camera2BasicFragment.newInstance())
                         .commit();
                 break;
