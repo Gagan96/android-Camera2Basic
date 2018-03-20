@@ -24,6 +24,7 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Matrix;
@@ -40,6 +41,7 @@ import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
@@ -63,12 +65,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 public class Camera2VideoFragment extends Fragment
-        implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback,
-        ActivityCompat.OnRequestPermissionsResultCallback{
+        implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback{
 
     private static final int SENSOR_ORIENTATION_DEFAULT_DEGREES = 90;
     private static final int SENSOR_ORIENTATION_INVERSE_DEGREES = 270;
@@ -221,6 +223,7 @@ public class Camera2VideoFragment extends Fragment
     private Integer mSensorOrientation;
     private String mNextVideoAbsolutePath;
     private CaptureRequest.Builder mPreviewBuilder;
+    private   File mFile;
 
     public static Camera2VideoFragment newInstance() {
         return new Camera2VideoFragment();
@@ -283,6 +286,12 @@ public class Camera2VideoFragment extends Fragment
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
+
+        mFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+ "/CameraAPI2/Videos/");
+        if(!mFile.mkdirs()){
+            Log.e(TAG,"Directory not created");
+        }
+
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
         mButtonVideo = (Button) view.findViewById(R.id.video);
         mButtonVideo.setOnClickListener(this);
@@ -329,12 +338,16 @@ public class Camera2VideoFragment extends Fragment
                 }
                 break;
             }
-            /*case R.id.change2cam: {
-                getFragmentManager().beginTransaction()
+            case R.id.change2cam: {
+                /*getFragmentManager().beginTransaction()
                         .replace(R.id.container,Camera2BasicFragment.newInstance())
                         .commit();
+                break;*/
+
+                Intent intent = new Intent(getActivity(), CameraActivity.class);
+                startActivity(intent);
                 break;
-            }*/
+            }
         }
     }
 
@@ -527,7 +540,7 @@ public class Camera2VideoFragment extends Fragment
                         public void onConfigureFailed(@NonNull CameraCaptureSession session) {
                             Activity activity = getActivity();
                             if (null != activity) {
-                                Toast.makeText(activity, "Failed", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(activity, "Failed onConfigureFailed", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }, mBackgroundHandler);
@@ -619,8 +632,7 @@ public class Camera2VideoFragment extends Fragment
 
     private String getVideoFilePath(Context context) {
         final File dir = context.getExternalFilesDir(null);
-        return (dir == null ? "" : (dir.getAbsolutePath() + "/"))
-                + System.currentTimeMillis() + ".mp4";
+        return (dir == null ? "" : (mFile + "/" + UUID.randomUUID() + ".mp4"));
     }
 
     private void startRecordingVideo() {
@@ -671,7 +683,7 @@ public class Camera2VideoFragment extends Fragment
                 public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
                     Activity activity = getActivity();
                     if (null != activity) {
-                        Toast.makeText(activity, "Failed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, "Failed onConfigureFailed2", Toast.LENGTH_SHORT).show();
                     }
                 }
             }, mBackgroundHandler);
